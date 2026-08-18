@@ -1,0 +1,39 @@
+// Dev container with the Privatemode proxy as a sidecar service.
+// Docs: https://containers.dev/implementors/json_reference/
+{
+  "name": "Privatemode Dev",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+
+  // Env vars for tools running inside the app container.
+  // OpenAI SDK and Claude Code pick these up automatically.
+  "containerEnv": {
+    "OPENAI_BASE_URL": "http://privatemode-proxy:8080/v1",
+    "OPENAI_API_KEY": "unused",
+    "ANTHROPIC_BASE_URL": "http://privatemode-proxy:8080",
+    "ANTHROPIC_API_KEY": "sk-privatemode",
+    "ANTHROPIC_MODEL": "kimi-latest",
+    // Kimi K2.6 has a 256k context window. Claude Code doesn't know
+    // custom models, so tell it explicitly (also silences a warning).
+    "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "262144",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "kimi-latest",
+    "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  },
+
+  // Expose the proxy on the host too (optional, for host-side clients).
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": {
+      "label": "Privatemode Proxy",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh"
+}

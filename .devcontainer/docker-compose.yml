@@ -1,0 +1,32 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    depends_on:
+      - privatemode-proxy
+
+  privatemode-proxy:
+    # Best practice: pin by digest instead of :latest, e.g.
+    # ghcr.io/edgelesssys/privatemode/privatemode-proxy@sha256:<digest>
+    image: ghcr.io/edgelesssys/privatemode/privatemode-proxy:latest
+    command:
+      # '@' = read the key from a file, so it never appears in the
+      # command line (visible via `docker inspect` / host `ps`).
+      - "--apiKey"
+      - "@/run/secrets/privatemode_api_key"
+      - "--sharedPromptCache"
+    secrets:
+      - privatemode_api_key
+    ports:
+      # Bind to localhost only — the proxy has no client auth or TLS,
+      # so it must not be reachable from the network.
+      - "127.0.0.1:8080:8080"
+    restart: unless-stopped
+
+secrets:
+  privatemode_api_key:
+    # Create this file with your API key as its only content
+    # (see api-key.example). It is gitignored.
+    file: ./api-key
