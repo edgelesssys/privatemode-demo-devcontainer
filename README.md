@@ -1,6 +1,6 @@
-# Privatemode Dev Container
+# Privatemode Demo Dev Container
 
-A ready-to-use development environment with the [Privatemode](https://www.privatemode.ai) proxy as a sidecar. Open it in VS Code and you get:
+A demo development environment with the [Privatemode](https://www.privatemode.ai) proxy as a sidecar. It shows how to run AI coding agents with end-to-end encryption and is meant as a starting point to adapt, not as a hardened production setup. Open it in VS Code and you get:
 
 - The **Privatemode proxy** running next to your dev container. It verifies the Privatemode backend via remote attestation and end-to-end encrypts all prompts and responses.
 - An **OpenAI-compatible endpoint** at `http://privatemode-proxy:8080/v1`, preconfigured via `OPENAI_BASE_URL`.
