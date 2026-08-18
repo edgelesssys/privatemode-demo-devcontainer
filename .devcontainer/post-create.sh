@@ -5,6 +5,14 @@ set -euo pipefail
 # Keep setup output clean: don't advertise npm self-updates.
 export NPM_CONFIG_UPDATE_NOTIFIER=false
 
+# Tools for the egress firewall (applied by init-firewall.sh on start),
+# plus ripgrep and fd, which pi would otherwise try to download at
+# first start (blocked by the firewall). Ubuntu installs fd as
+# "fdfind", so add a symlink under the name pi looks for.
+sudo apt-get update -qq
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq iptables ipset dnsutils ripgrep fd-find >/dev/null
+sudo ln -sf "$(command -v fdfind)" /usr/local/bin/fd
+
 # Coding agents: Claude Code (talks to the Privatemode proxy via
 # ANTHROPIC_BASE_URL, already set in devcontainer.json containerEnv),
 # opencode, and pi (both configured below via config files)

@@ -4,6 +4,10 @@ services:
     volumes:
       - ../..:/workspaces:cached
     command: sleep infinity
+    # Needed by init-firewall.sh (egress restriction inside the container)
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     depends_on:
       - privatemode-proxy
 

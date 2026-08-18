@@ -5,6 +5,7 @@ A demo development environment with the [Privatemode](https://www.privatemode.ai
 - The **Privatemode proxy** running next to your dev container. It verifies the Privatemode backend via remote attestation and end-to-end encrypts all prompts and responses.
 - An **OpenAI-compatible endpoint** at `http://privatemode-proxy:8080/v1`, preconfigured via `OPENAI_BASE_URL`.
 - **Claude Code, opencode, and pi** installed and preconfigured to use Privatemode as their backend. No accounts or logins required.
+- **Restricted network egress.** By default the container cannot reach the public internet at all. The agents work anyway because all AI traffic goes to the local proxy.
 
 ## Prerequisites
 
@@ -35,6 +36,18 @@ pi
 ```
 
 All agents default to `kimi-latest`. To use `gpt-oss-120b` instead, run `/model gpt-oss-120b` in opencode and pi, or `claude --model gpt-oss-120b`.
+
+## Network egress restriction
+
+On every start, a firewall inside the container blocks all outbound internet traffic (default deny). The coding agents are unaffected because they only talk to the Privatemode proxy on the local container network. This limits what an agent, or any code it runs, can exfiltrate.
+
+To let the container reach additional services directly, for example GitHub for `git push` or the npm registry for installing packages, add the domains to `.devcontainer/allowed-domains.txt` (commented examples included) and apply with:
+
+```bash
+sudo bash .devcontainer/init-firewall.sh
+```
+
+The firewall is adapted from the [Claude Code reference dev container](https://code.claude.com/docs/en/devcontainer#restrict-network-egress).
 
 ## How it works
 

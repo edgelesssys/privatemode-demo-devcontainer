@@ -35,5 +35,10 @@
     }
   },
 
-  "postCreateCommand": "bash .devcontainer/post-create.sh"
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  // Default-deny egress firewall, reapplied on every container start.
+  // Runs after postCreateCommand, so first-time installs still have
+  // network access. Extend via .devcontainer/allowed-domains.txt.
+  "postStartCommand": "sudo bash .devcontainer/init-firewall.sh"
 }

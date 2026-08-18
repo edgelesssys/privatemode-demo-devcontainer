@@ -1,0 +1,18 @@
+# Domains this container may reach directly, one per line.
+# Everything else on the public internet is blocked by init-firewall.sh.
+#
+# The Privatemode proxy sidecar is always reachable (local container
+# network), so AI traffic needs no entry here.
+#
+# After editing, apply with:
+#   sudo bash .devcontainer/init-firewall.sh
+#
+# Common additions (uncomment what you need):
+#
+# github.com
+# api.github.com
+# codeload.github.com
+# objects.githubusercontent.com
+# registry.npmjs.org
+# marketplace.visualstudio.com
+# update.code.visualstudio.com
