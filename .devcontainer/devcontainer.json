@@ -6,6 +6,13 @@
   "service": "app",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
+  // Non-root user. Also required for running Claude Code with
+  // --dangerously-skip-permissions (rejected when running as root).
+  "remoteUser": "vscode",
+
+  // Don't hand out terminals before the egress firewall is up.
+  "waitFor": "postStartCommand",
+
   "features": {
     "ghcr.io/devcontainers/features/node:1": {}
   },
@@ -23,7 +30,9 @@
     "CLAUDE_CODE_MAX_CONTEXT_TOKENS": "262144",
     "CLAUDE_CODE_SUBAGENT_MODEL": "kimi-latest",
     "CLAUDE_CODE_ATTRIBUTION_HEADER": "0",
-    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    // Updates can't pass the egress firewall anyway, disable cleanly
+    "DISABLE_AUTOUPDATER": "1"
   },
 
   // Expose the proxy on the host too (optional, for host-side clients).
